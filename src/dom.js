@@ -759,13 +759,13 @@
 
     //jQuery.browser = Deprecated
     //Not concerned about spoofing here...
-    var userAgent = navigator.userAgent || '';
+    var userAgent = navigator.userAgent || '';//
 
     if (userAgent.indexOf('Chrome') >= 0) {
       result.type = 'webkit';
     } else if (userAgent.indexOf('Safari') >= 0) {
       result.type = 'safari';
-    } else if (userAgent.indexOf('FireFox') >= 0) {
+    } else if (userAgent.indexOf('Firefox') >= 0) {
       result.type = 'mozilla';
     } else if (userAgent.indexOf('Opera') >= 0) {
       result.type = 'opera';
