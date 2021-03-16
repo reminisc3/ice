@@ -11,6 +11,6 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'ice-bundle.js',
+    filename: 'ice-bundle.min.js',
   },
 };

@@ -1,3 +1,17 @@
+
+# Update March 2021
+
+Special thanks to the CMS Group at the New York Times for this solution
+
+#Building
+
+Run the following at the command line
+
+npm install
+webpack
+
+The result will be a ice-bundle.min.js in your /dist folder. Then you can use this on the web!
+
 # ice.js
 
 Ice is a track changes implementation, built in javascript, for anything that is `contenteditable` on the web. Conceived by the CMS Group at The New York Times, ice is powering the editor used for writing articles in the newsroom.
@@ -60,7 +74,7 @@ Additional options:
 ***
 
 **_Useful utilities in the API:_**
-     
+
 **acceptChange, rejectChange**
 ```javascript
      // Accept/Reject the change at the current range/cursor position or at the given `optionalNode`
@@ -121,7 +135,7 @@ Additional options:
 
 ### Master
 
-- Fixes bug where Webkit browsers were throwing errors when the letter "v" was pressed. 
+- Fixes bug where Webkit browsers were throwing errors when the letter "v" was pressed.
 
 ### 0.5.0
 

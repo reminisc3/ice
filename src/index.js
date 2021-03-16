@@ -1,4 +1,5 @@
 window.ice = {};
+window.ice.version = '1.5.1';
 
 require('../lib/rangy/rangy-core.js');
 require('./dom.js');

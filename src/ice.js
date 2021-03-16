@@ -1,4 +1,4 @@
-(function () {
+(function() {
 
   var exports = this,
     defaults, InlineChangeEditor;
@@ -68,7 +68,7 @@
     mergeBlocks: true
   };
 
-  InlineChangeEditor = function (options) {
+  InlineChangeEditor = function(options) {
 
     // Data structure for modelling changes in the element according to the following model:
     //  [changeid] => {`type`, `time`, `userid`, `username`}
@@ -109,13 +109,13 @@
      * Turns on change tracking - sets up events, if needed, and initializes the environment,
      * range, and editor.
      */
-    startTracking: function () {
+    startTracking: function() {
       this.element.setAttribute('contentEditable', this.contentEditable);
 
       // If we are handling events setup the delegate to handle various events on `this.element`.
       if (this.handleEvents) {
         var self = this;
-        ice.dom.bind(self.element, 'keyup.ice keydown.ice keypress.ice mousedown.ice mouseup.ice', function (e) {
+        ice.dom.bind(self.element, 'keyup.ice keydown.ice keypress.ice mousedown.ice mouseup.ice', function(e) {
           return self.handleEvent(e);
         });
       }
@@ -132,7 +132,7 @@
     /**
      * Removes contenteditability and stops event handling.
      */
-    stopTracking: function () {
+    stopTracking: function() {
       this.element.setAttribute('contentEditable', !this.contentEditable);
 
       // If we are handling events setup the delegate to handle various events on `this.element`.
@@ -148,7 +148,7 @@
     /**
      * Initializes the `env` object with pointers to key objects of the page.
      */
-    initializeEnvironment: function () {
+    initializeEnvironment: function() {
       this.env || (this.env = {});
       this.env.element = this.element;
       this.env.document = this.element.ownerDocument;
@@ -163,7 +163,7 @@
     /**
      * Initializes the internal range object and sets focus to the editing element.
      */
-    initializeRange: function () {
+    initializeRange: function() {
       var range = this.selection.createRange();
       range.setStart(ice.dom.find(this.element, this.blockEls.join(', '))[0], 0);
       range.collapse(true);
@@ -175,7 +175,7 @@
     /**
      * Initializes the content in the editor - cleans non-block nodes found between blocks.
      */
-    initializeEditor: function () {
+    initializeEditor: function() {
       // Clean the element html body - add an empty block if there is no body, or remove any
       // content between elements.
       var body = this.env.document.createElement('div');
@@ -195,15 +195,16 @@
     /*
      * Updates the list of changes to include all track tags found inside the element.
      */
-    findTrackTags: function () {
+    findTrackTags: function() {
 
       // Grab class for each changeType
-      var self = this, changeTypeClasses = [];
+      var self = this,
+        changeTypeClasses = [];
       for (var changeType in this.changeTypes) {
         changeTypeClasses.push(this._getIceNodeClass(changeType));
       }
 
-      ice.dom.each(ice.dom.find(this.element, '.' + changeTypeClasses.join(', .')), function (i, el) {
+      ice.dom.each(ice.dom.find(this.element, '.' + changeTypeClasses.join(', .')), function(i, el) {
         var styleIndex = 0;
         var ctnType = '';
         var classList = el.className.split(' ');
@@ -228,7 +229,7 @@
     /**
      * Turn on change tracking and event handling.
      */
-    enableChangeTracking: function () {
+    enableChangeTracking: function() {
       this.isTracking = true;
       this.pluginsManager.fireEnabled(this.element);
     },
@@ -236,7 +237,7 @@
     /**
      * Turn off change tracking and event handling.
      */
-    disableChangeTracking: function () {
+    disableChangeTracking: function() {
       this.isTracking = false;
       this.pluginsManager.fireDisabled(this.element);
     },
@@ -245,7 +246,7 @@
      * Set the user to be tracked. A user object has the following properties:
      * {`id`, `name`}
      */
-    setCurrentUser: function (user) {
+    setCurrentUser: function(user) {
       this.currentUser = user;
     },
 
@@ -255,11 +256,11 @@
      * propagated to all of the plugins. Prevents default handling if the event
      * was fully handled.
      */
-    handleEvent: function (e) {
+    handleEvent: function(e) {
       if (!this.isTracking) return;
       if (e.type == 'mouseup') {
         var self = this;
-        setTimeout(function () {
+        setTimeout(function() {
           self.mouseUp(e);
         }, 200);
       } else if (e.type == 'mousedown') {
@@ -276,16 +277,16 @@
         this.pluginsManager.fireCaretUpdated();
       }
     },
-  visible: function(el) {
-    if(el.nodeType === ice.dom.TEXT_NODE) el = el.parentNode;
-    var rect = el.getBoundingClientRect();
-    return ( rect.top > 0 && rect.left > 0);
-  },
+    visible: function(el) {
+      if (el.nodeType === ice.dom.TEXT_NODE) el = el.parentNode;
+      var rect = el.getBoundingClientRect();
+      return (rect.top > 0 && rect.left > 0);
+    },
 
     /**
      * Returns a tracking tag for the given `changeType`, with the optional `childNode` appended.
      */
-    createIceNode: function (changeType, childNode) {
+    createIceNode: function(changeType, childNode) {
       var node = this.env.document.createElement(this.changeTypes[changeType].tag);
       ice.dom.addClass(node, this._getIceNodeClass(changeType));
 
@@ -303,7 +304,7 @@
      * the range first if needed. If range is undefined, then the range from the Selection object
      * is used. If the range is in a parent delete node, then the range is positioned after the delete.
      */
-    insert: function (node, range) {
+    insert: function(node, range) {
       // If the node is not defined, then we need to insert an
       // invisible space and force propagation to the browser.
       var isPropagating = !node;
@@ -347,7 +348,7 @@
      * Where [NUM] is the referenced allocation in the `_deletes` array where the
      * original delete node is stored.
      */
-    placeholdDeletes: function () {
+    placeholdDeletes: function() {
       var self = this;
       if (this.isPlaceholdingDeletes) {
         this.revertDeletePlaceholders();
@@ -355,7 +356,7 @@
       this.isPlaceholdingDeletes = true;
       this._deletes = [];
       var deleteSelector = '.' + this._getIceNodeClass('deleteType');
-      ice.dom.each(ice.dom.find(this.element, deleteSelector), function (i, el) {
+      ice.dom.each(ice.dom.find(this.element, deleteSelector), function(i, el) {
         self._deletes.push(ice.dom.cloneNode(el));
         ice.dom.replaceWith(el, '<' + self._delBookmark + ' data-allocation="' + (self._deletes.length - 1) + '"/>');
       });
@@ -371,12 +372,12 @@
      * Where [NUM] is the referenced allocation in the `_deletes` array where the
      * original delete node is stored.
      */
-    revertDeletePlaceholders: function () {
+    revertDeletePlaceholders: function() {
       var self = this;
       if (!this.isPlaceholdingDeletes) {
         return false;
       }
-      ice.dom.each(this._deletes, function (i, el) {
+      ice.dom.each(this._deletes, function(i, el) {
         ice.dom.find(self.element, self._delBookmark + '[data-allocation=' + i + ']').replaceWith(el);
       });
       this.isPlaceholdingDeletes = false;
@@ -389,9 +390,9 @@
      *
      * @return true if deletion was handled.
      */
-    deleteContents: function (right, range) {
+    deleteContents: function(right, range) {
       var prevent = true;
-    var browser = ice.dom.browser();
+      var browser = ice.dom.browser();
 
       if (range) {
         this.selection.addRange(range);
@@ -401,106 +402,103 @@
 
       var changeid = this.startBatchChange(this.changeTypes['deleteType'].alias);
       if (range.collapsed === false) {
-    if(this._currentUserIceNode(range.startContainer.parentNode)){
-      this._deleteSelection(range);
-    } else {
-      this._deleteSelection(range);
-      if(browser["type"] === "mozilla"){
-        if(range.startContainer.parentNode.previousSibling){
-          range.setEnd(range.startContainer.parentNode.previousSibling, 0);
-          range.moveEnd(ice.dom.CHARACTER_UNIT, ice.dom.getNodeCharacterLength(range.endContainer));
+        if (this._currentUserIceNode(range.startContainer.parentNode)) {
+          this._deleteSelection(range);
         } else {
-          range.setEndAfter(range.startContainer.parentNode);
+          this._deleteSelection(range);
+          if (browser["type"] === "mozilla") {
+            if (range.startContainer.parentNode.previousSibling) {
+              range.setEnd(range.startContainer.parentNode.previousSibling, 0);
+              range.moveEnd(ice.dom.CHARACTER_UNIT, ice.dom.getNodeCharacterLength(range.endContainer));
+            } else {
+              range.setEndAfter(range.startContainer.parentNode);
+            }
+            range.collapse(false);
+          } else {
+            if (!this.visible(range.endContainer)) {
+              range.setEnd(range.endContainer, range.endOffset - 1);
+              range.collapse(false);
+            }
+          }
         }
-        range.collapse(false);
-      } else {
-        if(!this.visible(range.endContainer)){
-          range.setEnd(range.endContainer, range.endOffset - 1);
-          range.collapse(false);
-        }
-      }
-    }
       } else {
         if (right) {
-      // RIGHT DELETE
-      if(browser["type"] === "mozilla"){
-        prevent = this._deleteRight(range);
-        // Handling track change show/hide
-        if(!this.visible(range.endContainer)){
-          if(range.endContainer.parentNode.nextSibling){
-//            range.setEnd(range.endContainer.parentNode.nextSibling, 0);
-            range.setEndBefore(range.endContainer.parentNode.nextSibling);
-          } else {
-            range.setEndAfter(range.endContainer);
-          }
-          range.collapse(false);
-        }
-      }
-      else {
-        // Calibrate Cursor before deleting
-        if(range.endOffset === ice.dom.getNodeCharacterLength(range.endContainer)){
-          var next = range.startContainer.nextSibling;
-          if (ice.dom.is(next,  '.' + this._getIceNodeClass('deleteType'))) {
-            while(next){
-              if (ice.dom.is(next,  '.' + this._getIceNodeClass('deleteType'))) {
-                next = next.nextSibling;
-                continue;
+          // RIGHT DELETE
+          if (browser["type"] === "mozilla") {
+            prevent = this._deleteRight(range);
+            // Handling track change show/hide
+            if (!this.visible(range.endContainer)) {
+              if (range.endContainer.parentNode.nextSibling) {
+                //            range.setEnd(range.endContainer.parentNode.nextSibling, 0);
+                range.setEndBefore(range.endContainer.parentNode.nextSibling);
+              } else {
+                range.setEndAfter(range.endContainer);
               }
-              range.setStart(next, 0);
-              range.collapse(true);
-              break;
+              range.collapse(false);
             }
-          }
-        }
-
-        // Delete
-        prevent = this._deleteRight(range);
-
-        // Calibrate Cursor after deleting
-        if(!this.visible(range.endContainer)){
-          if (ice.dom.is(range.endContainer.parentNode,  '.' + this._getIceNodeClass('insertType') + ', .' + this._getIceNodeClass('deleteType'))) {
-//            range.setStart(range.endContainer.parentNode.nextSibling, 0);
-            range.setStartAfter(range.endContainer.parentNode);
-            range.collapse(true);
-          }
-        }
-      }
-    }
-        else {
-      // LEFT DELETE
-      if(browser["type"] === "mozilla"){
-        prevent = this._deleteLeft(range);
-        // Handling track change show/hide
-        if(!this.visible(range.startContainer)){
-          if(range.startContainer.parentNode.previousSibling){
-            range.setEnd(range.startContainer.parentNode.previousSibling, 0);
           } else {
-            range.setEnd(range.startContainer.parentNode, 0);
-          }
-          range.moveEnd(ice.dom.CHARACTER_UNIT, ice.dom.getNodeCharacterLength(range.endContainer));
-          range.collapse(false);
-        }
-      }
-      else {
-        if(!this.visible(range.startContainer)){
-          if(range.endOffset === ice.dom.getNodeCharacterLength(range.endContainer)){
-            var prev = range.startContainer.previousSibling;
-            if (ice.dom.is(prev,  '.' + this._getIceNodeClass('deleteType'))) {
-              while(prev){
-                if (ice.dom.is(prev,  '.' + this._getIceNodeClass('deleteType'))) {
-                  prev = prev.prevSibling;
-                  continue;
+            // Calibrate Cursor before deleting
+            if (range.endOffset === ice.dom.getNodeCharacterLength(range.endContainer)) {
+              var next = range.startContainer.nextSibling;
+              if (ice.dom.is(next, '.' + this._getIceNodeClass('deleteType'))) {
+                while (next) {
+                  if (ice.dom.is(next, '.' + this._getIceNodeClass('deleteType'))) {
+                    next = next.nextSibling;
+                    continue;
+                  }
+                  range.setStart(next, 0);
+                  range.collapse(true);
+                  break;
                 }
-                range.setEndBefore(prev.nextSibling, 0);
-                range.collapse(false);
-                break;
+              }
+            }
+
+            // Delete
+            prevent = this._deleteRight(range);
+
+            // Calibrate Cursor after deleting
+            if (!this.visible(range.endContainer)) {
+              if (ice.dom.is(range.endContainer.parentNode, '.' + this._getIceNodeClass('insertType') + ', .' + this._getIceNodeClass('deleteType'))) {
+                //            range.setStart(range.endContainer.parentNode.nextSibling, 0);
+                range.setStartAfter(range.endContainer.parentNode);
+                range.collapse(true);
               }
             }
           }
+        } else {
+          // LEFT DELETE
+          if (browser["type"] === "mozilla") {
+            prevent = this._deleteLeft(range);
+            // Handling track change show/hide
+            if (!this.visible(range.startContainer)) {
+              if (range.startContainer.parentNode.previousSibling) {
+                range.setEnd(range.startContainer.parentNode.previousSibling, 0);
+              } else {
+                range.setEnd(range.startContainer.parentNode, 0);
+              }
+              range.moveEnd(ice.dom.CHARACTER_UNIT, ice.dom.getNodeCharacterLength(range.endContainer));
+              range.collapse(false);
+            }
+          } else {
+            if (!this.visible(range.startContainer)) {
+              if (range.endOffset === ice.dom.getNodeCharacterLength(range.endContainer)) {
+                var prev = range.startContainer.previousSibling;
+                if (ice.dom.is(prev, '.' + this._getIceNodeClass('deleteType'))) {
+                  while (prev) {
+                    if (ice.dom.is(prev, '.' + this._getIceNodeClass('deleteType'))) {
+                      prev = prev.prevSibling;
+                      continue;
+                    }
+                    range.setEndBefore(prev.nextSibling, 0);
+                    range.collapse(false);
+                    break;
+                  }
+                }
+              }
+            }
+            prevent = this._deleteLeft(range);
+          }
         }
-        prevent = this._deleteLeft(range);
-      }
-    }
       }
 
       this.selection.addRange(range);
@@ -512,21 +510,21 @@
      * Returns the changes - a hash of objects with the following properties:
      * [changeid] => {`type`, `time`, `userid`, `username`}
      */
-    getChanges: function () {
+    getChanges: function() {
       return this._changes;
     },
 
     /**
      * Returns an array with the user ids who made the changes
      */
-    getChangeUserids: function () {
+    getChangeUserids: function() {
       var result = [];
       var keys = Object.keys(this._changes);
 
       for (var key in keys)
-      result.push(this._changes[keys[key]].userid);
+        result.push(this._changes[keys[key]].userid);
 
-      return result.sort().filter(function (el, i, a) {
+      return result.sort().filter(function(el, i, a) {
         if (i == a.indexOf(el)) return 1;
         return 0;
       });
@@ -535,7 +533,7 @@
     /**
      * Returns the html contents for the tracked element.
      */
-    getElementContent: function () {
+    getElementContent: function() {
       return this.element.innerHTML;
     },
 
@@ -549,10 +547,10 @@
      *
      * prepare gets run before the body is cleaned by ice.
      */
-    getCleanContent: function (body, callback, prepare) {
+    getCleanContent: function(body, callback, prepare) {
       var classList = '';
       var self = this;
-      ice.dom.each(this.changeTypes, function (type, i) {
+      ice.dom.each(this.changeTypes, function(type, i) {
         if (type != 'deleteType') {
           if (i > 0) classList += ',';
           classList += '.' + self._getIceNodeClass(type);
@@ -566,7 +564,7 @@
       }
       body = prepare ? prepare.call(this, body) : body;
       var changes = ice.dom.find(body, classList);
-      ice.dom.each(changes, function (el, i) {
+      ice.dom.each(changes, function(el, i) {
         ice.dom.replaceWith(this, ice.dom.contents(this));
       });
       var deletes = ice.dom.find(body, '.' + this._getIceNodeClass('deleteType'));
@@ -581,7 +579,7 @@
      * Accepts all changes in the element body - removes delete nodes, and removes outer
      * insert tags keeping the inner content in place.
      */
-    acceptAll: function () {
+    acceptAll: function() {
       this.element.innerHTML = this.getCleanContent();
     },
 
@@ -589,12 +587,12 @@
      * Rejects all changes in the element body - removes insert nodes, and removes outer
      * delete tags keeping the inner content in place.*
      */
-    rejectAll: function () {
+    rejectAll: function() {
       var insSel = '.' + this._getIceNodeClass('insertType');
       var delSel = '.' + this._getIceNodeClass('deleteType');
 
       ice.dom.remove(ice.dom.find(this.element, insSel));
-      ice.dom.each(ice.dom.find(this.element, delSel), function (i, el) {
+      ice.dom.each(ice.dom.find(this.element, delSel), function(i, el) {
         ice.dom.replaceWith(el, ice.dom.contents(el));
       });
     },
@@ -605,7 +603,7 @@
      * In the case of insert, inner content will be used to replace the containing tag; and in
      * the case of delete, the node will be removed.
      */
-    acceptChange: function (node) {
+    acceptChange: function(node) {
       this.acceptRejectChange(node, true);
     },
 
@@ -615,14 +613,14 @@
      * In the case of delete, inner content will be used to replace the containing tag; and in
      * the case of insert, the node will be removed.
      */
-    rejectChange: function (node) {
+    rejectChange: function(node) {
       this.acceptRejectChange(node, false);
     },
 
     /**
      * Handles accepting or rejecting tracking changes
      */
-    acceptRejectChange: function (node, isAccept) {
+    acceptRejectChange: function(node, isAccept) {
       var delSel, insSel, selector, removeSel, replaceSel, trackNode, changes, dom = ice.dom;
 
       if (!node) {
@@ -645,7 +643,7 @@
       }
 
       if (ice.dom.is(trackNode, replaceSel)) {
-        dom.each(changes, function (i, node) {
+        dom.each(changes, function(i, node) {
           dom.replaceWith(node, ice.dom.contents(node));
         });
       } else if (dom.is(trackNode, removeSel)) {
@@ -657,7 +655,7 @@
      * Returns true if the given `node`, or the current collapsed range is in a tracking
      * node; otherwise, false.
      */
-    isInsideChange: function (node) {
+    isInsideChange: function(node) {
       var selector = '.' + this._getIceNodeClass('insertType') + ', .' + this._getIceNodeClass('deleteType');
       if (!node) {
         range = this.getCurrentRange();
@@ -670,7 +668,7 @@
     /**
      * Add a new change tracking typeName with the given tag and alias.
      */
-    addChangeType: function (typeName, tag, alias, action) {
+    addChangeType: function(typeName, tag, alias, action) {
       var changeType = {
         tag: tag,
         alias: alias
@@ -684,7 +682,7 @@
     /**
      * Returns this `node` or the first parent tracking node with the given `changeType`.
      */
-    getIceNode: function (node, changeType) {
+    getIceNode: function(node, changeType) {
       var selector = '.' + this._getIceNodeClass(changeType);
       return ice.dom.getNode(node, selector);
     },
@@ -693,7 +691,7 @@
      * Sets the given `range` to the first position, to the right, where it is outside of
      * void elements.
      */
-    _moveRangeToValidTrackingPos: function (range) {
+    _moveRangeToValidTrackingPos: function(range) {
       var onEdge = false;
       var voidEl = this._getVoidElement(range.endContainer);
       while (voidEl) {
@@ -714,7 +712,7 @@
         voidEl = this._getVoidElement(range.endContainer);
         if (voidEl) {
           range.setEnd(range.endContainer, 0);
-      range.moveEnd(ice.dom.CHARACTER_UNIT, ice.dom.getNodeCharacterLength(range.endContainer));
+          range.moveEnd(ice.dom.CHARACTER_UNIT, ice.dom.getNodeCharacterLength(range.endContainer));
           range.collapse();
         } else {
           range.setStart(range.endContainer, 0);
@@ -726,7 +724,7 @@
     /**
      * Returns the given `node` or the first parent node that matches against the list of no track elements.
      */
-    _getNoTrackElement: function (node) {
+    _getNoTrackElement: function(node) {
       var noTrackSelector = this._getNoTrackSelector();
       var parent = ice.dom.is(node, noTrackSelector) ? node : (ice.dom.parents(node, noTrackSelector)[0] || null);
       return parent;
@@ -735,14 +733,14 @@
     /**
      * Returns a selector for not tracking changes
      */
-    _getNoTrackSelector: function () {
+    _getNoTrackSelector: function() {
       return this.noTrack;
     },
 
     /**
      * Returns the given `node` or the first parent node that matches against the list of void elements.
      */
-    _getVoidElement: function (node) {
+    _getVoidElement: function(node) {
       var voidSelector = this._getVoidElSelector();
       return ice.dom.is(node, voidSelector) ? node : (ice.dom.parents(node, voidSelector)[0] || null);
     },
@@ -750,14 +748,14 @@
     /**
      * Returns a combined selector for delete and void elements.
      */
-    _getVoidElSelector: function () {
+    _getVoidElSelector: function() {
       return '.' + this._getIceNodeClass('deleteType') + ',' + this.avoid;
     },
 
     /**
      * Returns true if node has a user id attribute that matches the current user id.
      */
-    _currentUserIceNode: function (node) {
+    _currentUserIceNode: function(node) {
       return ice.dom.attr(node, this.userIdAttribute) == this.currentUser.id;
     },
 
@@ -765,7 +763,7 @@
      * With the given alias, searches the changeTypes objects and returns the
      * associated key for the alias.
      */
-    _getChangeTypeFromAlias: function (alias) {
+    _getChangeTypeFromAlias: function(alias) {
       var type, ctnType = null;
       for (type in this.changeTypes) {
         if (this.changeTypes.hasOwnProperty(type)) {
@@ -778,24 +776,24 @@
       return ctnType;
     },
 
-    _getIceNodeClass: function (changeType) {
+    _getIceNodeClass: function(changeType) {
       return this.attrValuePrefix + this.changeTypes[changeType].alias;
     },
 
-    getUserStyle: function (userid) {
+    getUserStyle: function(userid) {
       var styleIndex = null;
       if (this._userStyles[userid]) styleIndex = this._userStyles[userid];
       else styleIndex = this.setUserStyle(userid, this.getNewStyleId());
       return styleIndex;
     },
 
-    setUserStyle: function (userid, styleIndex) {
+    setUserStyle: function(userid, styleIndex) {
       var style = this.stylePrefix + '-' + styleIndex;
       if (!this._styles[styleIndex]) this._styles[styleIndex] = true;
       return this._userStyles[userid] = style;
     },
 
-    getNewStyleId: function () {
+    getNewStyleId: function() {
       var id = ++this._uniqueStyleIndex;
       if (this._styles[id]) {
         // Dupe.. create another..
@@ -806,7 +804,7 @@
       }
     },
 
-    addChange: function (ctnType, ctNodes) {
+    addChange: function(ctnType, ctNodes) {
       var changeid = this._batchChangeid || this.getNewChangeId();
       if (!this._changes[changeid]) {
         // Create the change object.
@@ -818,7 +816,7 @@
         };
       }
       var self = this;
-      ice.dom.foreach(ctNodes, function (i) {
+      ice.dom.foreach(ctNodes, function(i) {
         self.addNodeToChange(changeid, ctNodes[i]);
       });
 
@@ -830,7 +828,7 @@
      * @param changeid Id of an existing change.
      * @param ctNode The element to add for the change.
      */
-    addNodeToChange: function (changeid, ctNode) {
+    addNodeToChange: function(changeid, ctNode) {
       if (this._batchChangeid !== null) changeid = this._batchChangeid;
 
       var change = this.getChange(changeid);
@@ -849,7 +847,7 @@
       if (!ice.dom.hasClass(ctNode, style)) ice.dom.addClass(ctNode, style);
     },
 
-    getChange: function (changeid) {
+    getChange: function(changeid) {
       var change = null;
       if (this._changes[changeid]) {
         change = this._changes[changeid];
@@ -857,7 +855,7 @@
       return change;
     },
 
-    getNewChangeId: function () {
+    getNewChangeId: function() {
       var id = ++this._uniqueIDIndex;
       if (this._changes[id]) {
         // Dupe.. create another..
@@ -866,21 +864,21 @@
       return id;
     },
 
-    startBatchChange: function () {
+    startBatchChange: function() {
       this._batchChangeid = this.getNewChangeId();
       return this._batchChangeid;
     },
 
-    endBatchChange: function (changeid) {
+    endBatchChange: function(changeid) {
       if (changeid !== this._batchChangeid) return;
       this._batchChangeid = null;
     },
 
-    getCurrentRange: function () {
+    getCurrentRange: function() {
       return this.selection.getRangeAt(0);
     },
 
-    _insertNode: function (node, range, insertingDummy) {
+    _insertNode: function(node, range, insertingDummy) {
       var origNode = node;
       if (!ice.dom.isBlockElement(range.startContainer) && !ice.dom.canContainTextElement(ice.dom.getBlockParent(range.startContainer, this.element)) && range.startContainer.previousSibling) {
         range.setStart(range.startContainer.previousSibling, 0);
@@ -934,7 +932,7 @@
       return false;
     },
 
-    _deleteSelection: function (range) {
+    _deleteSelection: function(range) {
 
       // Bookmark the range and get elements between.
       var bookmark = new ice.Bookmark(this.env, range),
@@ -997,12 +995,12 @@
       }
 
       bookmark.selectBookmark();
-//      range.collapse(false);
-  range.collapse(true);
+      //      range.collapse(false);
+      range.collapse(true);
     },
 
     // Delete
-    _deleteRight: function (range) {
+    _deleteRight: function(range) {
 
       var parentBlock = ice.dom.isBlockElement(range.startContainer) && range.startContainer || ice.dom.getBlockParent(range.startContainer, this.element) || null,
         isEmptyBlock = parentBlock ? (ice.dom.hasNoTextOrStubContent(parentBlock)) : false,
@@ -1141,7 +1139,7 @@
     },
 
     // Backspace
-    _deleteLeft: function (range) {
+    _deleteLeft: function(range) {
 
       var parentBlock = ice.dom.isBlockElement(range.startContainer) && range.startContainer || ice.dom.getBlockParent(range.startContainer, this.element) || null,
         isEmptyBlock = parentBlock ? ice.dom.hasNoTextOrStubContent(parentBlock) : false,
@@ -1182,14 +1180,14 @@
         if (initialOffset === 0) {
           prevContainer = ice.dom.getPrevContentNode(initialContainer, this.element);
         } else {
-        var newOffset = initialOffset;
-      var style;
-//      while(newOffset > 0){
-//        prevContainer = commonAncestor.childNodes[--newOffset];
-//        if(!ice.dom.hasClass(prevContainer, "del")) break;
-//        prevContainer = null;
-//      }
-      prevContainer = commonAncestor.childNodes[initialOffset-1];
+          var newOffset = initialOffset;
+          var style;
+          //      while(newOffset > 0){
+          //        prevContainer = commonAncestor.childNodes[--newOffset];
+          //        if(!ice.dom.hasClass(prevContainer, "del")) break;
+          //        prevContainer = null;
+          //      }
+          prevContainer = commonAncestor.childNodes[initialOffset - 1];
         }
 
         // If the previous container is outside of ICE then do nothing.
@@ -1197,7 +1195,7 @@
           return false;
         }
         // Firefox finds an ice node wrapped around an image instead of the image itself sometimes, so we make sure to look at the image instead.
-        if (ice.dom.is(prevContainer,  '.' + this._getIceNodeClass('insertType') + ', .' + this._getIceNodeClass('deleteType')) && prevContainer.childNodes.length > 0 && prevContainer.lastChild) {
+        if (ice.dom.is(prevContainer, '.' + this._getIceNodeClass('insertType') + ', .' + this._getIceNodeClass('deleteType')) && prevContainer.childNodes.length > 0 && prevContainer.lastChild) {
           prevContainer = prevContainer.lastChild;
         }
 
@@ -1220,7 +1218,7 @@
 
         // If the caret was placed directly after a stub element, enclose the element with a delete ice node.
         if (ice.dom.isStubElement(prevContainer) && ice.dom.isChildOf(prevContainer, parentBlock) || !prevContainer.isContentEditable) {
-           return this._addNodeTracking(prevContainer, range, true);
+          return this._addNodeTracking(prevContainer, range, true);
         }
 
         // If the previous container is a stub element between blocks
@@ -1330,7 +1328,7 @@
     },
 
     // Marks text and other nodes for deletion
-    _addNodeTracking: function (contentNode, range, moveLeft) {
+    _addNodeTracking: function(contentNode, range, moveLeft) {
 
       var contentAddNode = this.getIceNode(contentNode, 'insertType');
 
@@ -1452,7 +1450,7 @@
      * @param {event} e The event object.
      * return {void|boolean} Returns false if default event needs to be blocked.
      */
-    _handleAncillaryKey: function (e) {
+    _handleAncillaryKey: function(e) {
       var key = e.keyCode ? e.keyCode : e.which;
       var browser = ice.dom.browser();
       var preventDefault = true;
@@ -1470,9 +1468,9 @@
           this.pluginsManager.fireKeyPressed(e);
           break;
 
-        /************************************************************************************/
-        /** BEGIN: Handling of caret movements inside hidden .ins/.del elements on Firefox **/
-        /**  *Fix for carets getting stuck in .del elements when track changes are hidden  **/
+          /************************************************************************************/
+          /** BEGIN: Handling of caret movements inside hidden .ins/.del elements on Firefox **/
+          /**  *Fix for carets getting stuck in .del elements when track changes are hidden  **/
         case ice.dom.DOM_VK_DOWN:
         case ice.dom.DOM_VK_UP:
         case ice.dom.DOM_VK_LEFT:
@@ -1480,7 +1478,7 @@
           if (browser["type"] === "mozilla") {
             if (!this.visible(range.startContainer)) {
               // if Previous sibling exists in the paragraph, jump to the previous sibling
-              if(range.startContainer.parentNode.previousSibling) {
+              if (range.startContainer.parentNode.previousSibling) {
                 // When moving left and moving into a hidden element, skip it and go to the previousSibling
                 range.setEnd(range.startContainer.parentNode.previousSibling, 0);
                 range.moveEnd(ice.dom.CHARACTER_UNIT, ice.dom.getNodeCharacterLength(range.endContainer));
@@ -1499,23 +1497,23 @@
           this.pluginsManager.fireCaretPositioned();
           if (browser["type"] === "mozilla") {
             if (!this.visible(range.startContainer)) {
-              if(range.startContainer.parentNode.nextSibling) {
+              if (range.startContainer.parentNode.nextSibling) {
                 // When moving right and moving into a hidden element, skip it and go to the nextSibling
-                range.setStart(range.startContainer.parentNode.nextSibling,0);
+                range.setStart(range.startContainer.parentNode.nextSibling, 0);
                 range.collapse(true);
               }
             }
           }
           preventDefault = false;
           break;
-        /** END: Handling of caret movements inside hidden .ins/.del elements ***************/
-        /************************************************************************************/
+          /** END: Handling of caret movements inside hidden .ins/.del elements ***************/
+          /************************************************************************************/
 
         case 32:
           preventDefault = true;
           var range = this.getCurrentRange();
           this._moveRangeToValidTrackingPos(range, range.startContainer);
-          this.insert('\u00A0' , range);
+          this.insert('\u00A0', range);
           break;
         default:
           // Ignore key.
@@ -1530,7 +1528,7 @@
       return true;
     },
 
-    keyDown: function (e) {
+    keyDown: function(e) {
       if (!this.pluginsManager.fireKeyDown(e)) {
         ice.dom.preventDefault(e);
         return false;
@@ -1563,7 +1561,7 @@
           // If not Firefox then check if event is special arrow key etc.
           // Firefox will handle this in keyPress event.
           //if (/Firefox/.test(navigator.userAgent) !== true) {
-            //preventDefault = !(this._handleAncillaryKey(e));
+          //preventDefault = !(this._handleAncillaryKey(e));
           //}
 
       }
@@ -1575,7 +1573,7 @@
       return true;
     },
 
-    keyPress: function (e) {
+    keyPress: function(e) {
       if (this._preventKeyPress === true) {
         this._preventKeyPress = false;
         return;
@@ -1620,13 +1618,13 @@
       return this._handleAncillaryKey(e);
     },
 
-    _handleEnter: function () {
+    _handleEnter: function() {
       var range = this.getCurrentRange();
       if (!range.collapsed) this.deleteContents();
       return true;
     },
 
-    _handleSpecialKey: function (e) {
+    _handleSpecialKey: function(e) {
       var keyCode = e.which;
       if (keyCode === null) {
         // IE.
@@ -1678,12 +1676,12 @@
       return true;
     },
 
-    mouseUp: function (e, target) {
+    mouseUp: function(e, target) {
       if (!this.pluginsManager.fireClicked(e)) return false;
       this.pluginsManager.fireSelectionChanged(this.getCurrentRange());
     },
 
-    mouseDown: function (e, target) {
+    mouseDown: function(e, target) {
       if (!this.pluginsManager.fireMouseDown(e)) return false;
       this.pluginsManager.fireCaretUpdated();
     }
