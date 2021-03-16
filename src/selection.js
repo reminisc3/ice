@@ -21,7 +21,7 @@
 		  this._selection.refresh();
 	  }
       else if (this.env.frame) {
-		  this._selection = rangy.getIframeSelection(this.env.frame);
+		  this._selection = rangy.getSelection(this.env.frame); //getIframeSelection = Deprecated
 	  }
       else {
 		  this._selection = rangy.getSelection();
@@ -133,33 +133,33 @@
        * test <em>|it</em> out
        * test| <em>it</em> out
        * tes|t <em>it</em> out
-       * 
+       *
        * A range could be mapped in one of two ways:
-       * 
+       *
        * (1) If a startContainer is a Node of type Text, Comment, or CDATASection, then startOffset
        * is the number of characters from the start of startNode. For example, the following
        * are the range properties for `<p>te|st</p>` (where "|" is the collapsed range):
-       * 
+       *
        * startContainer: <TEXT>test<TEXT>
        * startOffset: 2
        * endContainer: <TEXT>test<TEXT>
        * endOffset: 2
-       * 
+       *
        * (2) For other Node types, startOffset is the number of child nodes between the start of
        * the startNode. Take the following html fragment:
-       * 
+       *
        * `<p>some <span>test</span> text</p>`
-       * 
+       *
        * If we were working with the following range properties:
-       * 
+       *
        * startContainer: <p>
        * startOffset: 2
        * endContainer: <p>
        * endOffset: 2
-       * 
+       *
        * Since <p> is an Element node, the offsets are based on the offset in child nodes of <p> and
        * the range is selecting the second child - the <span> tag.
-       * 
+       *
        * <p><TEXT>some </TEXT><SPAN>test</SPAN><TEXT> text</TEXT></p>
        */
       rangy.rangePrototype.moveCharLeft = function (moveStart, units) {
@@ -228,33 +228,33 @@
        * test <em>i|t</em> out
        * test <em>it|</em> out
        * test <em>it</em> |out
-       * 
+       *
        * A range could be mapped in one of two ways:
-       * 
+       *
        * (1) If a startContainer is a Node of type Text, Comment, or CDATASection, then startOffset
        * is the number of characters from the start of startNode. For example, the following
        * are the range properties for `<p>te|st</p>` (where "|" is the collapsed range):
-       * 
+       *
        * startContainer: <TEXT>test<TEXT>
        * startOffset: 2
        * endContainer: <TEXT>test<TEXT>
        * endOffset: 2
-       * 
+       *
        * (2) For other Node types, startOffset is the number of child nodes between the start of
        * the startNode. Take the following html fragment:
-       * 
+       *
        * `<p>some <span>test</span> text</p>`
-       * 
+       *
        * If we were working with the following range properties:
-       * 
+       *
        * startContainer: <p>
        * startOffset: 2
        * endContainer: <p>
        * endOffset: 2
-       * 
+       *
        * Since <p> is an Element node, the offsets are based on the offset in child nodes of <p> and
        * the range is selecting the second child - the <span> tag.
-       * 
+       *
        * <p><TEXT>some </TEXT><SPAN>test</SPAN><TEXT> text</TEXT></p>
        */
       rangy.rangePrototype.moveCharRight = function (moveStart, units) {

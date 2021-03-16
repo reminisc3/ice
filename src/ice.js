@@ -191,12 +191,12 @@
       }
 
     },
- 
+
     /*
      * Updates the list of changes to include all track tags found inside the element.
      */
     findTrackTags: function () {
-      
+
       // Grab class for each changeType
       var self = this, changeTypeClasses = [];
       for (var changeType in this.changeTypes) {
@@ -941,7 +941,7 @@
         elements = ice.dom.getElementsBetween(bookmark.start, bookmark.end),
         b1 = ice.dom.parents(range.startContainer, this.blockEls.join(', '))[0],
         b2 = ice.dom.parents(range.endContainer, this.blockEls.join(', '))[0],
-        betweenBlocks = new Array(); 
+        betweenBlocks = new Array();
 
       for (var i = 0; i < elements.length; i++) {
         var elem = elements[i];
@@ -1556,12 +1556,16 @@
           // ESC
           break;
         default:
+          preventDefault = !(this._handleAncillaryKey(e));
+          break;
+
+          //Update 2021-03-16 - This causes an issue in new versions of FF. No longer needed
           // If not Firefox then check if event is special arrow key etc.
           // Firefox will handle this in keyPress event.
-          if (/Firefox/.test(navigator.userAgent) !== true) {
-            preventDefault = !(this._handleAncillaryKey(e));
-          }
-          break;
+          //if (/Firefox/.test(navigator.userAgent) !== true) {
+            //preventDefault = !(this._handleAncillaryKey(e));
+          //}
+
       }
 
       if (preventDefault) {
@@ -1576,7 +1580,7 @@
         this._preventKeyPress = false;
         return;
       }
-      
+
       if (!this.pluginsManager.fireKeyPress(e)) return false;
 
       var c = null;

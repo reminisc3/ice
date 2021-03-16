@@ -184,7 +184,7 @@
       } catch(e){}
 
       // Handling jQuery bug (which may be fixed in the official release later)
-      // http://bugs.jquery.com/ticket/13401 
+      // http://bugs.jquery.com/ticket/13401
       if(ret.length === 0){
         $this.remove();
       }
