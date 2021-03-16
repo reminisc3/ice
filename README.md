@@ -7,8 +7,8 @@ Special thanks to the CMS Group at the New York Times for this solution
 
 Run the following at the command line
 
-npm install
-webpack
+- npm install
+- webpack
 
 The result will be a ice-bundle.min.js in your /dist folder. Then you can use this on the web!
 
