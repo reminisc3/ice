@@ -1,4 +1,4 @@
-(function () {
+(function() {
   var exports = this,
     dom = {};
 
@@ -30,10 +30,10 @@
   dom.STUB_ELEMENTS = dom.CONTENT_STUB_ELEMENTS.slice();
   dom.STUB_ELEMENTS.push(dom.BREAK_ELEMENT);
 
-  dom.getKeyChar = function (e) {
+  dom.getKeyChar = function(e) {
     return String.fromCharCode(e.which);
   };
-  dom.getClass = function (className, startElement, tagName) {
+  dom.getClass = function(className, startElement, tagName) {
     if (!startElement) {
       startElement = document.body;
     }
@@ -43,61 +43,61 @@
     }
     return jQuery.makeArray(jQuery(startElement).find(className));
   };
-  dom.getId = function (id, startElement) {
+  dom.getId = function(id, startElement) {
     if (!startElement) {
       startElement = document;
     }
     element = startElement.getElementById(id);
     return element;
   };
-  dom.getTag = function (tagName, startElement) {
+  dom.getTag = function(tagName, startElement) {
     if (!startElement) {
       startElement = document;
     }
     return jQuery.makeArray(jQuery(startElement).find(tagName));
   };
-  dom.getElementWidth = function (element) {
+  dom.getElementWidth = function(element) {
     return element.offsetWidth;
   };
-  dom.getElementHeight = function (element) {
+  dom.getElementHeight = function(element) {
     return element.offsetHeight;
   };
-  dom.getElementDimensions = function (element) {
+  dom.getElementDimensions = function(element) {
     var result = {
       'width': dom.getElementWidth(element),
       'height': dom.getElementHeight(element)
     };
     return result;
   };
-  dom.trim = function (string) {
+  dom.trim = function(string) {
     return jQuery.trim(string);
   };
-  dom.empty = function (element) {
+  dom.empty = function(element) {
     if (element) {
       return jQuery(element).empty();
     }
   };
-  dom.remove = function (element) {
+  dom.remove = function(element) {
     if (element) {
       return jQuery(element).remove();
     }
   };
-  dom.prepend = function (parent, elem) {
+  dom.prepend = function(parent, elem) {
     jQuery(parent).prepend(elem);
   };
-  dom.append = function (parent, elem) {
+  dom.append = function(parent, elem) {
     jQuery(parent).append(elem);
   };
-  dom.insertBefore = function (before, elem) {
+  dom.insertBefore = function(before, elem) {
     jQuery(before).before(elem);
   };
-  dom.insertAfter = function (after, elem) {
+  dom.insertAfter = function(after, elem) {
     jQuery(after).after(elem);
   };
-  dom.getHtml = function (element) {
+  dom.getHtml = function(element) {
     return jQuery(element).html();
   };
-  dom.setHtml = function (element, content) {
+  dom.setHtml = function(element, content) {
     if (element) {
       jQuery(element).html(content);
     }
@@ -122,13 +122,13 @@
       }
     }).remove();
   };
-  dom.contents = function (el) {
+  dom.contents = function(el) {
     return jQuery.makeArray(jQuery(el).contents());
   };
   /**
    * Returns the inner contents of `el` as a DocumentFragment.
    */
-  dom.extractContent = function (el) {
+  dom.extractContent = function(el) {
     var frag = document.createDocumentFragment(),
       child;
     while ((child = el.firstChild)) {
@@ -140,11 +140,11 @@
   /**
    * Returns this `node` or the first parent tracking node that matches the given `selector`.
    */
-  dom.getNode = function (node, selector) {
+  dom.getNode = function(node, selector) {
     return dom.is(node, selector) ? node : dom.parents(node, selector)[0] || null;
   };
 
-  dom.getParents = function (elements, filter, stopEl) {
+  dom.getParents = function(elements, filter, stopEl) {
     var res = jQuery(elements).parents(filter);
     var ln = res.length;
     var ar = [];
@@ -156,7 +156,7 @@
     }
     return ar;
   };
-  dom.hasBlockChildren = function (parent) {
+  dom.hasBlockChildren = function(parent) {
     var c = parent.childNodes.length;
     for (var i = 0; i < c; i++) {
       if (parent.childNodes[i].nodeType === dom.ELEMENT_NODE) {
@@ -167,32 +167,32 @@
     }
     return false;
   };
-  dom.removeTag = function (element, selector) {
-    jQuery(element).find(selector).replaceWith(function () {
+  dom.removeTag = function(element, selector) {
+    jQuery(element).find(selector).replaceWith(function() {
       return jQuery(this).contents();
     });
     return element;
   };
-  dom.stripEnclosingTags = function (content, allowedTags) {
+  dom.stripEnclosingTags = function(content, allowedTags) {
     var c = jQuery(content);
-    c.find('*').not(allowedTags).replaceWith(function () {
+    c.find('*').not(allowedTags).replaceWith(function() {
       var ret = jQuery();
       var $this;
-      try{
+      try {
         $this = jQuery(this);
         ret = $this.contents();
-      } catch(e){}
+      } catch (e) {}
 
       // Handling jQuery bug (which may be fixed in the official release later)
       // http://bugs.jquery.com/ticket/13401
-      if(ret.length === 0){
+      if (ret.length === 0) {
         $this.remove();
       }
       return ret;
     });
     return c[0];
   };
-  dom.getSiblings = function (element, dir, elementNodesOnly, stopElem) {
+  dom.getSiblings = function(element, dir, elementNodesOnly, stopElem) {
     if (elementNodesOnly === true) {
       if (dir === 'prev') {
         return jQuery(element).prevAll();
@@ -221,27 +221,27 @@
       return elems;
     }
   };
-  dom.getNodeTextContent = function (node) {
+  dom.getNodeTextContent = function(node) {
     return jQuery(node).text();
   };
-  dom.getNodeStubContent = function (node) {
+  dom.getNodeStubContent = function(node) {
     return jQuery(node).find(dom.CONTENT_STUB_ELEMENTS.join(', '));
   };
-  dom.hasNoTextOrStubContent = function (node) {
+  dom.hasNoTextOrStubContent = function(node) {
     if (dom.getNodeTextContent(node).length > 0) return false;
     if (jQuery(node).find(dom.CONTENT_STUB_ELEMENTS.join(', ')).length > 0) return false;
     return true;
   };
-  dom.getNodeCharacterLength = function (node) {
+  dom.getNodeCharacterLength = function(node) {
     return dom.getNodeTextContent(node).length + jQuery(node).find(dom.STUB_ELEMENTS.join(', ')).length;
   };
-  dom.setNodeTextContent = function (node, txt) {
+  dom.setNodeTextContent = function(node, txt) {
     return jQuery(node).text(txt);
   };
-  dom.getTagName = function (node) {
+  dom.getTagName = function(node) {
     return node.tagName && node.tagName.toLowerCase() || null;
   };
-  dom.getIframeDocument = function (iframe) {
+  dom.getIframeDocument = function(iframe) {
     var doc = null;
     if (iframe.contentDocument) {
       doc = iframe.contentDocument;
@@ -252,15 +252,15 @@
     }
     return doc;
   };
-  dom.isBlockElement = function (element) {
+  dom.isBlockElement = function(element) {
     return dom.BLOCK_ELEMENTS.lastIndexOf(element.nodeName.toLowerCase()) != -1;
   };
-  dom.isStubElement = function (element) {
+  dom.isStubElement = function(element) {
     return dom.STUB_ELEMENTS.lastIndexOf(element.nodeName.toLowerCase()) != -1;
   };
-  dom.removeBRFromChild = function (node) {
+  dom.removeBRFromChild = function(node) {
     if (node && node.hasChildNodes()) {
-      for(var z=0; z < node.childNodes.length ; z++) {
+      for (var z = 0; z < node.childNodes.length; z++) {
         var child = node.childNodes[z];
         if (child && (ice.dom.BREAK_ELEMENT == ice.dom.getTagName(child))) {
           child.parentNode.removeChild(child);
@@ -268,7 +268,7 @@
       }
     }
   };
-  dom.isChildOf = function (el, parent) {
+  dom.isChildOf = function(el, parent) {
     try {
       while (el && el.parentNode) {
         if (el.parentNode === parent) {
@@ -279,7 +279,7 @@
     } catch (e) {}
     return false;
   };
-  dom.isChildOfTagName = function (el, name) {
+  dom.isChildOfTagName = function(el, name) {
     try {
       while (el && el.parentNode) {
         if (el.parentNode && el.parentNode.tagName && el.parentNode.tagName.toLowerCase() === name) {
@@ -292,7 +292,7 @@
   };
 
 
-  dom.isChildOfTagNames = function (el, names) {
+  dom.isChildOfTagNames = function(el, names) {
     try {
       while (el && el.parentNode) {
         if (el.parentNode && el.parentNode.tagName) {
@@ -309,7 +309,7 @@
     return null;
   };
 
-  dom.isChildOfClassName = function (el, name) {
+  dom.isChildOfClassName = function(el, name) {
     try {
       while (el && el.parentNode) {
         if (jQuery(el.parentNode).hasClass(name)) return el.parentNode;
@@ -318,32 +318,32 @@
     } catch (e) {}
     return null;
   };
-  dom.cloneNode = function (elems, cloneEvents) {
+  dom.cloneNode = function(elems, cloneEvents) {
     if (cloneEvents === undefined) {
       cloneEvents = true;
     }
     return jQuery(elems).clone(cloneEvents);
   };
 
-  dom.bind = function (element, event, callback) {
+  dom.bind = function(element, event, callback) {
     return jQuery(element).bind(event, callback);
   };
 
-  dom.unbind = function (element, event, callback) {
+  dom.unbind = function(element, event, callback) {
     return jQuery(element).unbind(event, callback);
   };
 
-  dom.attr = function (elements, key, val) {
+  dom.attr = function(elements, key, val) {
     if (val) return jQuery(elements).attr(key, val);
     else return jQuery(elements).attr(key);
   };
-  dom.replaceWith = function (node, replacement) {
+  dom.replaceWith = function(node, replacement) {
     return jQuery(node).replaceWith(replacement);
   };
-  dom.removeAttr = function (elements, name) {
+  dom.removeAttr = function(elements, name) {
     jQuery(elements).removeAttr(name);
   };
-  dom.getElementsBetween = function (fromElem, toElem) {
+  dom.getElementsBetween = function(fromElem, toElem) {
     var elements = [];
     if (fromElem === toElem) {
       return elements;
@@ -384,7 +384,7 @@
     elements = dom.arrayMerge(elements, dom.getElementsBetween(lastParent, toElem));
     return elements;
   };
-  dom.getCommonAncestor = function (a, b) {
+  dom.getCommonAncestor = function(a, b) {
     var node = a;
     while (node) {
       if (dom.isChildOf(b, node) === true) {
@@ -394,7 +394,7 @@
     }
     return null;
   };
-  dom.getNextNode = function (node, container) {
+  dom.getNextNode = function(node, container) {
     if (node) {
       while (node.parentNode) {
         if (node === container) {
@@ -415,7 +415,7 @@
     }
     return null;
   };
-  dom.getNextContentNode = function (node, container) {
+  dom.getNextContentNode = function(node, container) {
     if (node) {
       while (node.parentNode) {
         if (node === container) {
@@ -441,7 +441,7 @@
   };
 
 
-  dom.getPrevNode = function (node, container) {
+  dom.getPrevNode = function(node, container) {
     if (node) {
       while (node.parentNode) {
         if (node === container) {
@@ -462,7 +462,7 @@
     }
     return null;
   };
-  dom.getPrevContentNode = function (node, container) {
+  dom.getPrevContentNode = function(node, container) {
     if (node) {
       while (node.parentNode) {
         if (node === container) {
@@ -487,7 +487,7 @@
     return null;
   };
 
-  dom.canContainTextElement = function (element) {
+  dom.canContainTextElement = function(element) {
     if (element && element.nodeName) {
       return dom.TEXT_CONTAINER_ELEMENTS.lastIndexOf(element.nodeName.toLowerCase()) != -1;
     } else {
@@ -495,7 +495,7 @@
     }
   };
 
-  dom.getFirstChild = function (node) {
+  dom.getFirstChild = function(node) {
     if (node.firstChild) {
       if (node.firstChild.nodeType === dom.ELEMENT_NODE) {
         return dom.getFirstChild(node.firstChild);
@@ -505,7 +505,7 @@
     }
     return node;
   };
-  dom.getLastChild = function (node) {
+  dom.getLastChild = function(node) {
     if (node.lastChild) {
       if (node.lastChild.nodeType === dom.ELEMENT_NODE) {
         return dom.getLastChild(node.lastChild);
@@ -515,7 +515,7 @@
     }
     return node;
   };
-  dom.removeEmptyNodes = function (parent, callback) {
+  dom.removeEmptyNodes = function(parent, callback) {
     var elems = jQuery(parent).find(':empty');
     var i = elems.length;
     while (i > 0) {
@@ -527,28 +527,28 @@
       }
     }
   };
-  dom.create = function (html) {
+  dom.create = function(html) {
     return jQuery(html)[0];
   };
-  dom.find = function (parent, exp) {
+  dom.find = function(parent, exp) {
     return jQuery(parent).find(exp);
   };
-  dom.children = function (parent, exp) {
+  dom.children = function(parent, exp) {
     return jQuery(parent).children(exp);
   };
-  dom.parent = function (child, exp) {
+  dom.parent = function(child, exp) {
     return jQuery(child).parent(exp)[0];
   };
-  dom.parents = function (child, exp) {
+  dom.parents = function(child, exp) {
     return jQuery(child).parents(exp);
   };
-  dom.is = function (node, exp) {
+  dom.is = function(node, exp) {
     return jQuery(node).is(exp);
   };
-  dom.extend = function (deep, target, object1, object2) {
+  dom.extend = function(deep, target, object1, object2) {
     return jQuery.extend.apply(this, arguments);
   };
-  dom.walk = function (elem, callback, lvl) {
+  dom.walk = function(elem, callback, lvl) {
     if (!elem) {
       return;
     }
@@ -567,7 +567,7 @@
       dom.walk(elem.parentNode.nextSibling, callback, (lvl - 1));
     }
   };
-  dom.revWalk = function (elem, callback) {
+  dom.revWalk = function(elem, callback) {
     if (!elem) {
       return;
     }
@@ -583,38 +583,38 @@
       dom.walk(elem.parentNode.previousSibling, callback);
     }
   };
-  dom.setStyle = function (element, property, value) {
+  dom.setStyle = function(element, property, value) {
     if (element) {
       jQuery(element).css(property, value);
     }
   };
-  dom.getStyle = function (element, property) {
+  dom.getStyle = function(element, property) {
     return jQuery(element).css(property);
   };
-  dom.hasClass = function (element, className) {
+  dom.hasClass = function(element, className) {
     return jQuery(element).hasClass(className);
   };
-  dom.addClass = function (element, classNames) {
+  dom.addClass = function(element, classNames) {
     jQuery(element).addClass(classNames);
   };
-  dom.removeClass = function (element, classNames) {
+  dom.removeClass = function(element, classNames) {
     jQuery(element).removeClass(classNames);
   };
-  dom.preventDefault = function (e) {
+  dom.preventDefault = function(e) {
     e.preventDefault();
     dom.stopPropagation(e);
   };
-  dom.stopPropagation = function (e) {
+  dom.stopPropagation = function(e) {
     e.stopPropagation();
   };
-  dom.noInclusionInherits = function (child, parent) {
+  dom.noInclusionInherits = function(child, parent) {
     if (parent instanceof String || typeof parent === 'string') {
       parent = window[parent];
     }
     if (child instanceof String || typeof child === 'string') {
       child = window[child];
     }
-    var above = function () {};
+    var above = function() {};
     if (dom.isset(parent) === true) {
       for (value in parent.prototype) {
         if (child.prototype[value]) {
@@ -630,13 +630,13 @@
     }
   };
 
-  dom.each = function (val, callback) {
-    jQuery.each(val, function (i, el) {
+  dom.each = function(val, callback) {
+    jQuery.each(val, function(i, el) {
       callback.call(this, i, el);
     });
   };
 
-  dom.foreach = function (value, cb) {
+  dom.foreach = function(value, cb) {
     if (value instanceof Array || value instanceof NodeList || typeof value.length != 'undefined' && typeof value.item != 'undefined') {
       var len = value.length;
       for (var i = 0; i < len; i++) {
@@ -656,47 +656,47 @@
       }
     }
   };
-  dom.isBlank = function (value) {
+  dom.isBlank = function(value) {
     if (!value || /^\s*$/.test(value)) {
       return true;
     }
     return false;
   };
-  dom.isFn = function (f) {
+  dom.isFn = function(f) {
     if (typeof f === 'function') {
       return true;
     }
     return false;
   };
-  dom.isObj = function (v) {
+  dom.isObj = function(v) {
     if (v !== null && typeof v === 'object') {
       return true;
     }
     return false;
   };
-  dom.isset = function (v) {
+  dom.isset = function(v) {
     if (typeof v !== 'undefined' && v !== null) {
       return true;
     }
     return false;
   };
-  dom.isArray = function (v) {
+  dom.isArray = function(v) {
     return jQuery.isArray(v);
   };
-  dom.isNumeric = function (str) {
+  dom.isNumeric = function(str) {
     var result = str.match(/^\d+$/);
     if (result !== null) {
       return true;
     }
     return false;
   };
-  dom.getUniqueId = function () {
+  dom.getUniqueId = function() {
     var timestamp = (new Date()).getTime();
     var random = Math.ceil(Math.random() * 1000000);
     var id = timestamp + '' + random;
     return id.substr(5, 18).replace(/,/, '');
   };
-  dom.inArray = function (needle, haystack) {
+  dom.inArray = function(needle, haystack) {
     var hln = haystack.length;
     for (var i = 0; i < hln; i++) {
       if (needle === haystack[i]) {
@@ -705,7 +705,7 @@
     }
     return false;
   };
-  dom.arrayDiff = function (array1, array2, firstOnly) {
+  dom.arrayDiff = function(array1, array2, firstOnly) {
     var al = array1.length;
     var res = [];
     for (var i = 0; i < al; i++) {
@@ -723,7 +723,7 @@
     }
     return res;
   };
-  dom.arrayMerge = function (array1, array2) {
+  dom.arrayMerge = function(array1, array2) {
     var c = array2.length;
     for (var i = 0; i < c; i++) {
       array1.push(array2[i]);
@@ -734,7 +734,7 @@
    * Removes allowedTags from the given content html string. If allowedTags is a string, then it
    * is expected to be a selector; otherwise, it is expected to be array of string tag names.
    */
-  dom.stripTags = function (content, allowedTags) {
+  dom.stripTags = function(content, allowedTags) {
     if (typeof allowedTags === "string") {
       var c = jQuery('<div>' + content + '</div>');
       c.find('*').not(allowedTags).remove();
@@ -751,21 +751,31 @@
       return resCont;
     }
   };
-  dom.browser = function () {
+  dom.browser = function() {
+
     var result = {};
-    result.version = jQuery.browser.version;
-    if (jQuery.browser.mozilla === true) {
-      result.type = 'mozilla';
-    } else if (jQuery.browser.msie === true) {
-      result.type = 'msie';
-    } else if (jQuery.browser.opera === true) {
-      result.type = 'opera';
-    } else if (jQuery.browser.webkit === true) {
+    result.version = ''; //Not necessary really...
+    result.type = 'webkit'; //Default
+
+    //jQuery.browser = Deprecated
+    //Not concerned about spoofing here...
+    var userAgent = navigator.userAgent || '';
+
+    if (userAgent.indexOf('Chrome') >= 0) {
       result.type = 'webkit';
+    } else if (userAgent.indexOf('Safari') >= 0) {
+      result.type = 'safari';
+    } else if (userAgent.indexOf('FireFox') >= 0) {
+      result.type = 'mozilla';
+    } else if (userAgent.indexOf('Opera') >= 0) {
+      result.type = 'opera';
+    } else if (userAgent.indexOf('MSIE') >= 0) {
+      result.type = 'msie';
     }
+
     return result;
   };
-  dom.getBrowserType = function () {
+  dom.getBrowserType = function() {
     if (this._browserType === null) {
       var tests = ['msie', 'firefox', 'chrome', 'safari'];
       var tln = tests.length;
@@ -781,20 +791,20 @@
     }
     return this._browserType;
   };
-  dom.getWebkitType = function(){
-	if(dom.browser().type !== "webkit") {
-		console.log("Not a webkit!");
-		return false;
-	}
+  dom.getWebkitType = function() {
+    if (dom.browser().type !== "webkit") {
+      console.log("Not a webkit!");
+      return false;
+    }
     var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
-	if(isSafari) return "safari";
-	return "chrome";
+    if (isSafari) return "safari";
+    return "chrome";
   };
-  dom.isBrowser = function (browser) {
+  dom.isBrowser = function(browser) {
     return (dom.browser().type === browser);
   };
 
-  dom.getBlockParent = function (node, container) {
+  dom.getBlockParent = function(node, container) {
     if (dom.isBlockElement(node) === true) {
       return node;
     }
@@ -812,7 +822,7 @@
     }
     return null;
   };
-  dom.findNodeParent = function (node, selector, container) {
+  dom.findNodeParent = function(node, selector, container) {
     if (node) {
       while (node.parentNode) {
         if (node === container) {
@@ -827,21 +837,21 @@
     }
     return null;
   };
-  dom.onBlockBoundary = function (leftContainer, rightContainer, blockEls) {
+  dom.onBlockBoundary = function(leftContainer, rightContainer, blockEls) {
     if (!leftContainer || !rightContainer) return false
     var bleft = dom.isChildOfTagNames(leftContainer, blockEls) || dom.is(leftContainer, blockEls.join(', ')) && leftContainer || null;
     var bright = dom.isChildOfTagNames(rightContainer, blockEls) || dom.is(rightContainer, blockEls.join(', ')) && rightContainer || null;
     return (bleft !== bright);
   };
 
-  dom.isOnBlockBoundary = function (leftContainer, rightContainer, container) {
+  dom.isOnBlockBoundary = function(leftContainer, rightContainer, container) {
     if (!leftContainer || !rightContainer) return false
     var bleft = dom.getBlockParent(leftContainer, container) || dom.isBlockElement(leftContainer, container) && leftContainer || null;
     var bright = dom.getBlockParent(rightContainer, container) || dom.isBlockElement(rightContainer, container) && rightContainer || null;
     return (bleft !== bright);
   };
 
-  dom.mergeContainers = function (node, mergeToNode) {
+  dom.mergeContainers = function(node, mergeToNode) {
     if (!node || !mergeToNode) return false;
 
     if (node.nodeType === dom.TEXT_NODE || dom.isStubElement(node)) {
@@ -858,7 +868,7 @@
     return true;
   };
 
-  dom.mergeBlockWithSibling = function (range, block, next) {
+  dom.mergeBlockWithSibling = function(range, block, next) {
     var siblingBlock = next ? jQuery(block).next().get(0) : jQuery(block).prev().get(0); // block['nextSibling'] : block['previousSibling'];
     if (next) dom.mergeContainers(siblingBlock, block);
     else dom.mergeContainers(block, siblingBlock);
@@ -866,7 +876,7 @@
     return true;
   };
 
-  dom.date = function (format, timestamp, tsIso8601) {
+  dom.date = function(format, timestamp, tsIso8601) {
     if (timestamp === null && tsIso8601) {
       timestamp = dom.tsIso8601ToTimestamp(tsIso8601);
       if (!timestamp) {
@@ -942,7 +952,7 @@
     }
     return dateStr;
   };
-  dom.getOrdinalSuffix = function (number) {
+  dom.getOrdinalSuffix = function(number) {
     var suffix = '';
     var tmp = (number % 100);
     if (tmp >= 4 && tmp <= 20) {
@@ -965,13 +975,13 @@
     }
     return suffix;
   };
-  dom.addNumberPadding = function (number) {
+  dom.addNumberPadding = function(number) {
     if (number < 10) {
       number = '0' + number;
     }
     return number;
   };
-  dom.tsIso8601ToTimestamp = function (tsIso8601) {
+  dom.tsIso8601ToTimestamp = function(tsIso8601) {
     var regexp = /(\d\d\d\d)(?:-?(\d\d)(?:-?(\d\d)(?:[T ](\d\d)(?::?(\d\d)(?::?(\d\d)(?:\.(\d+))?)?)?(?:Z|(?:([-+])(\d\d)(?::?(\d\d))?)?)?)?)?)?/;
     var d = tsIso8601.match(new RegExp(regexp));
     if (d) {
